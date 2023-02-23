@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  auth:
+    build:
+      context: backend\auth
+      dockerfile: dockerfile
+    ports:
+      - 2020:2020
+  email:
+    build: 
+      context: backend\Email
+      dockerfile: dockerfile
+    ports:
+      - 5050:5050
+  mssql:
+    build: 
+      context: backend\DB
+      dockerfile: dockerfile
+    ports:
+      - 1437:1433
+    volumes:
+      - ./mysql_incontainer:/var/opt/mssql/data
+  rabbit:
+    image: rabbitmq:3.10-rc-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
