@@ -1,4 +1,3 @@
-const mssql = require('mssql')
 const env = require('dotenv')
 env.config()
 
@@ -8,6 +7,7 @@ const config = {
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
     server: process.env.SERVER,
+    port: parseInt(process.env.MSSQL_PORT),
     pool: {
         idleTimeoutMillis: 30000,
         max: 3,

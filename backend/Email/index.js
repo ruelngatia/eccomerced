@@ -6,7 +6,7 @@ const { mailNewUser } = require('./Mailings/mailer');
 // create my exchage
 const setUpExchange = async()=>{
     try {
-        const connection = await amq.connect('amqp://localhost:5672');
+        const connection = await amq.connect('amqp://rabbitMQ:5672');
         const channel = await connection.createChannel();
 
         const exchangeName = 'emailExchange';
@@ -26,7 +26,7 @@ const setUpExchange = async()=>{
 
 const consume = async()=>{
     try {
-        const connection = await amq.connect('amqp://localhost:5672');
+        const connection = await amq.connect('amqp://rabbitMQ:5672');
         const channel = await connection.createChannel();
 
         const exchangeName = 'emailExchange';
@@ -61,7 +61,7 @@ const consume = async()=>{
 
 setUpExchange()
 // const publish = async()=>{
-//     const connection = await amq.connect('amqp://localhost:5672')
+//     const connection = await amq.connect('amqp://rabbitMQ:5672')
 //     const channel = await connection.createChannel()
 
 //     const exchangeName = 'emailExchange';

@@ -2,27 +2,49 @@ version: '3.7'
 
 services:
   auth:
+    container_name: auth
     build:
-      context: backend\auth
+      context: backend/auth
       dockerfile: dockerfile
     ports:
       - 2020:2020
+    depends_on:
+      - mssql
+    networks:
+      - e-commerce
   email:
+    container_name: emailService
     build: 
-      context: backend\Email
+      context: backend/Email
       dockerfile: dockerfile
     ports:
       - 5050:5050
+    depends_on:
+      - rabbit
+    networks:
+      - e-commerce 
   mssql:
+    container_name: mssql
+    hostname: mssql
     build: 
-      context: backend\DB
+      context: backend/DB
       dockerfile: dockerfile
     ports:
       - 1437:1433
     volumes:
       - ./mysql_incontainer:/var/opt/mssql/data
+    networks:
+      - e-commerce
   rabbit:
+    container_name: rabbitMQ
     image: rabbitmq:3.10-rc-management-alpine
     ports:
       - 5672:5672
       - 15672:15672
+    networks:
+      - e-commerce   
+  
+networks:
+  e-commerce:
+    name: e-commerce
+
