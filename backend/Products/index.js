@@ -8,5 +8,5 @@ app.use(router)
 
 
 app.listen(process.env.PORT||3000,()=>{
-    console.log('product running on 3000...');
+    console.log('products service running on 3000...');
 })
