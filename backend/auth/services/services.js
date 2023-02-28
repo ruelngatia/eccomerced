@@ -1,8 +1,11 @@
+const amqp = require('amqplib')
 const {dbhelper} = require('../dbHelper/dbHelper')
 const jwt = require('jsonwebtoken')
 const env = require('dotenv')
 env.config()
 
+const uri = 'amqp://localhost:5672'
+const exchangeName = 'emailExchange';
 const loginService = async(user)=>{
     try {
         let result = await dbhelper.exec('loginUser',user)
@@ -28,11 +31,27 @@ const signupService = async(user)=>{
         let result = await dbhelper.exec('signupUser',user)
         
         if(result.returnValue == 0){
+            let userName =  user.first_name + ' ' + user.second_name
+            let message = {
+                name: userName
+            }
+            console.log(message);
+            console.log(JSON.stringify(message));
+            sendNotificationEMail(JSON.stringify(message))
             return {message: 'user added successfully'}
         }
     } catch (error) {
         console.log(error);
     }
+}
+
+const sendNotificationEMail = async(name)=>{
+    const connection = await amqp.connect(uri)
+    const channel = await connection.createChannel()
+
+    await channel.assertExchange(exchangeName,'topic',{durable: true})
+    channel.publish(exchangeName,'email.newUser',Buffer.from(name))
+
 }
 
 module.exports = { loginService,signupService}

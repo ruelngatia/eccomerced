@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer')
 const ejs = require('ejs')
 const env = require('dotenv')
 const fs = require('fs')
+const { log } = require('console')
 env.config('../')
 
 const transporter = nodemailer.createTransport({
@@ -15,8 +16,9 @@ const transporter = nodemailer.createTransport({
 const subject = 'New Account created'
 
 const mailNewUser = (data)=>{
-    const template = ejs.compile(fs.readFileSync(__dirname + '/templates/newUser/newUser.ejs', 'utf8'))
-    let html = template({name: data.name})
+    let uri = __dirname + '/templates/newUser/newUser.ejs'
+    const template = ejs.compile(fs.readFileSync(uri, 'utf8'))
+    let html = template(data)
 
     let mailOptions = {
         from: process.env.EMAIL,
@@ -29,7 +31,7 @@ const mailNewUser = (data)=>{
         if(error){
             console.log(error);
         }else{
-            console.log(info);
+            // console.log(info);
         }
     })
 }

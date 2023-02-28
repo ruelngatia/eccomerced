@@ -2,11 +2,13 @@ const amq = require('amqplib');
 const { mailNewUser } = require('./Mailings/mailer');
 
 
+// const uri = 'amqp://rabbitMQ:5672'
+const uri = 'amqp://localhost:5672'
 
 // create my exchage
 const setUpExchange = async()=>{
     try {
-        const connection = await amq.connect('amqp://rabbitMQ:5672');
+        const connection = await amq.connect(uri);
         const channel = await connection.createChannel();
 
         const exchangeName = 'emailExchange';
@@ -26,7 +28,7 @@ const setUpExchange = async()=>{
 
 const consume = async()=>{
     try {
-        const connection = await amq.connect('amqp://rabbitMQ:5672');
+        const connection = await amq.connect(uri);
         const channel = await connection.createChannel();
 
         const exchangeName = 'emailExchange';
@@ -38,13 +40,12 @@ const consume = async()=>{
         const k = await channel.assertQueue('',{exclusive: true})
         channel.bindQueue(k.queue,exchangeName,'email.*')
 
-        console.log('listenning ....');
+        console.log('Email service listenning ....');
         channel.consume(k.queue,msg=>{
-            msg
-            console.log( msg.content.toString());
             switch (msg.fields.routingKey) {
                 case 'email.newUser':
-                    mailNewUser(msg.content.toJSON())
+                    let message = JSON.parse(msg.content.toString())
+                    mailNewUser(message)
                     break;
         
                 default:
@@ -61,7 +62,7 @@ const consume = async()=>{
 
 setUpExchange()
 // const publish = async()=>{
-//     const connection = await amq.connect('amqp://rabbitMQ:5672')
+//     const connection = await amq.connect(uri)
 //     const channel = await connection.createChannel()
 
 //     const exchangeName = 'emailExchange';
