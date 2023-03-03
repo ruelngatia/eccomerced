@@ -1,23 +1,22 @@
 const env = require('dotenv')
-env.config()
-
+env.config('../')
 
 const config = {
     user: process.env.USER,
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
     server: process.env.SERVER,
-    port: parseInt(process.env.MSSQL_PORT),
-    parseJSON: true,
     pool: {
-        idleTimeoutMillis: 30000,
-        max: 3,
-        min: 0
+        max: 10,
+        min: 2,
+        idleTimeoutMillis: 3000
     },
-    options:{
-        encrypt: false, 
+    options: {
+        encrypt: false,
         trustServerCertificate: false
     }
 }
 
-module.exports = {config}
+module.exports = {
+    config
+}

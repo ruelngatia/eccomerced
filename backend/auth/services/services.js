@@ -9,14 +9,17 @@ const exchangeName = 'emailExchange';
 const loginService = async(user)=>{
     try {
         let result = await dbhelper.exec('loginUser',user)
+        let payload = result.recordsets.flat(2)
+        console.log(payload);
         if(result.rowsAffected[0] > 0){
-            let token = jwt.sign(result,process.env.SECRET,{expiresIn: '1h'})
+            let token = jwt.sign(payload[0],process.env.SECRET,{expiresIn: '1h'})
             return token
         }else{
             return {message: 'wrong user or password'}
         }
     } catch (error) {
         console.log(error);
+        throw error
     }
 }
 
