@@ -1,44 +1,44 @@
 const mssql = require('mssql')
 const {config} = require('../dbConfig/dbConfig')
 
-
-class DBhelper {
+class DBHelper{
 
     constructor(){
-        this.conectionPool = this.getConnectionPool()
+        this.connectionPool = this.createConnection()
     }
 
-    async getConnectionPool(){
-        try {
+    async createConnection(){
+        try{
             let pool = await mssql.connect(config)
             return pool
-        } catch (error) {
-            throw error        
+        }catch(error){
+            throw error
         }
     }
 
     createRequest(request,data = {}){
         let keys = Object.keys(data)
-        keys.map((key)=>{
+        keys.forEach((key)=>{
             request.input(key,data[key])
         })
-        return request
+        return request;
     }
 
     async exec(procedure, data = {}){
-       try {
-            let request = await (await this.conectionPool).request()
+        try {
+            let request = await (await this.connectionPool).request()
             request = this.createRequest(request,data)
             let result = await request.execute(procedure)
             return result
-       } catch (error) {
+        } catch (error) {
+            console.log(error);
             throw error
-       }
+        }
     }
 
     async query(querString){
         try {
-            let result = await (await this.conectionPool).query(querString)
+            let result = await (await this.connectionPool).query(querString)
             return result
         } catch (error) {
             console.log(error);
@@ -47,8 +47,8 @@ class DBhelper {
 
 }
 
-const dbhelper = new DBhelper();
+const dbHelper = new DBHelper()
 
 module.exports = {
-    dbhelper: dbhelper
+    dbHelper: dbHelper
 }
