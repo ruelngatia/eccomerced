@@ -50,7 +50,7 @@ const addProducts = async(req,res)=>{
         if(result.rowsAffected[0] == 0){
             return res.status(404).send({mesage: "Product was not added"})
         }
-        res.status(200).send(result)
+        res.status(200).send({mesage: "Product was added succesfully"})
     } catch (error) {
         console.log(error);
         res.status(500).send({message: 'internal sever error'})
