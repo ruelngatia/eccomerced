@@ -7,7 +7,7 @@ const getAllProducts = async(req,res)=>{
         if(result.rowsAffected[0]== 0){
             return res.status(404).send({message: 'no products found'})
         }
-        res.status(200).send(result.recordsets)
+        res.status(200).send(result.recordsets.flat(2))
    } catch (error) {
         res.status(500).send({mesage: "internal server error"})
    }
@@ -22,7 +22,7 @@ const getProductByCategory = async(req,res)=>{
         if(result.rowsAffected[0] == 0){
             return res.status(404).send({mesage: "no products under the category"})
         }
-        res.status(200).send(result)
+        res.status(200).send(result.recordsets.flat(2))
     } catch (error) {
         console.log(error);
         res.status(500).send({mesage: 'internal sever error'})
@@ -36,7 +36,7 @@ const getProduct = async(req,res)=>{
         if(result.rowsAffected[0] == 0){
             return res.status(404).send({mesage: "no such products was found"})
         }
-        res.status(200).send(result)
+        res.status(200).send(result.recordsets.flat(3))
     } catch (error) {
         console.log(error);
         res.status(500).send({message: 'internal sever error'})
