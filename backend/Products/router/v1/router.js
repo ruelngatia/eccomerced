@@ -5,7 +5,7 @@ const {sellerVerification} = require('../../middleware/middleware')
 
 router.get('/v1/',getAllProducts)
 router.get('/v1/catgory/:category',getProductByCategory)
-router.get('/v1/:product',getProduct)
+router.get('/v1/:id',getProduct)
 router.post('/v1/products',sellerVerification,addProducts)
 
 

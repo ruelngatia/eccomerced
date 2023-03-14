@@ -6,6 +6,7 @@ const config = {
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
     server: process.env.SERVER,
+    parseJSON: true,
     pool: {
         max: 10,
         min: 2,
